@@ -46,15 +46,21 @@ function checkSign($data) {
     $tmpData = $data;
     //log_result("tmpData / Data：".$tmpData);
     unset($tmpData['sign']);
-    $sign = getSign($tmpData);//本地签名
 
+    if ($tmpData['trade_type'] == 'JSAPI') {
+        // 小程序支付验证
+        $sign = getSign($tmpData, true);
+    } else {
+        // 微信app sdk支付验证
+        $sign = getSign($tmpData);//本地签名
+    }
     log_result("客户端签名：".$data['sign']."  本地签名:".$sign);
     if ($data['sign'] == $sign) {
         return TRUE;
     }
     return FALSE;
 }
-function getSign($Obj) {
+function getSign($Obj, $isMicro = false) {
 
     foreach ($Obj as $k => $v) {
         $Parameters[$k] = $v;
@@ -63,19 +69,18 @@ function getSign($Obj) {
     //签名步骤一：按字典序排序参数
     ksort($Parameters);
     $String = formatBizQueryParaMap($Parameters, false);
-    //echo '【string1】'.$String.'</br>';
     //签名步骤二：在string后加入KEY
-    global $appConfig;
-    $String = $String.'&key='.$appConfig['api_key'];
-//	iU87e6yYhl084iY5e4kiduyhUYThdmn2
-    //log_result("回调参数str: ".$String);
-    //echo "【string2】".$String."</br>";
+    if ($isMicro) { // 小程序配置
+        global $microProgramConfig;
+        $String = $String.'&key='.$microProgramConfig['api_key'];
+    } else { // 微信appsdk支付配置
+        global $appConfig;
+        $String = $String.'&key='.$appConfig['api_key'];
+    }
     //签名步骤三：MD5加密
     $String = md5($String);
-    //echo "【string3】 ".$String."</br>";
     //签名步骤四：所有字符转为大写
     $result_ = strtoupper($String);
-    //echo "【result】 ".$result_."</br>";
     return $result_;
 }
 

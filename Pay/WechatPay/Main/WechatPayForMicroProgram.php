@@ -14,7 +14,7 @@ class WechatPayForMicroProgram extends WechatPay {
 
     public function __construct() {
 
-        require_once (dirname(__FILE__).'/WechatPayConfig.php');
+        require_once (dirname(__FILE__).'./../Config/WechatPayConfig.php');
         $this->config = $microProgramConfig;
         $this->trade_type = 'JSAPI';
 
