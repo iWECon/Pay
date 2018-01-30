@@ -41,6 +41,42 @@ $appConfig = array(
 );
 ```
 
+##### 使用
+见 `Pay/index.php`，按照注释填写相关内容；\
+微信回调地址：https://域名/路径/Pay/WechatPay/Respond/respond.php；\
+支付宝回调地址：https://域名/路径/Pay/Alipay/Respond/respond.php；\
+
+**微信回调地址**
+需要修改/添加：
+```
+if ($checkingPass == TRUE) {
+    if ($data['return_code'] == 'FAIL') {
+        log_result('通信出错: \n'.$xml.'\n');
+    } elseif ($data['result_code'] == 'FAIL') {
+        log_result('业务出错: \n'.$xml.'\n');
+    } else {
+        // 在此写下订单支付成功后的操作, 例如修改订单状态为已支付 或者其他操作
+
+        // 记录订单号到日志, 根据实际情况记录需要的信息到日志中
+        //$wxsn = $data['out_trade_no'];
+        //log_result('支付成功, 微信订单号: '.$wxsn.', \n回调参数: \n'.$xml);
+        exit();
+    }
+}
+```
+
+**支付宝回调地址**
+需要修改/添加：
+```
+        if ($trade_status == 'TRADE_FINISHED' || $trade_status == 'TRADE_SUCCESS') {
+            // 交易成功/支付成功
+            // 改变订单状态
+
+            Save_log('body: '.$respondBody.', \nLog_ID: '.$log_id.', \n支付宝交易号: '.$trade_no.', \n结果: 支付成功.');
+
+            return;
+        }
+```
 
 
 **需要配置的参数已在php文件中说明, 自行查找解决~**
