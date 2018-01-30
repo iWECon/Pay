@@ -43,10 +43,10 @@ $appConfig = array(
 
 ##### 使用
 见 `Pay/index.php`，按照注释填写相关内容；\
-微信回调地址：https://域名/路径/Pay/WechatPay/Respond/respond.php；\
-支付宝回调地址：https://域名/路径/Pay/Alipay/Respond/respond.php；\
+微信回调地址：https://域名/路径/Pay/WechatPay/Respond/respond.php \
+支付宝回调地址：https://域名/路径/Pay/Alipay/Respond/respond.php
 
-**微信回调地址**
+**微信回调地址**\
 需要修改/添加：
 ```
 if ($checkingPass == TRUE) {
@@ -65,7 +65,7 @@ if ($checkingPass == TRUE) {
 }
 ```
 
-**支付宝回调地址**
+**支付宝回调地址**\
 需要修改/添加：
 ```
         if ($trade_status == 'TRADE_FINISHED' || $trade_status == 'TRADE_SUCCESS') {
